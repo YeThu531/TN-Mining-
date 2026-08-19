@@ -3,718 +3,1326 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>TN Mining</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <link rel="stylesheet" href="style.css">
+    :root {
+      --bg: #07110c;
+      --card: #0d1912;
+      --card2: #101f15;
+      --border: #203d2a;
+      --green: #20c46b;
+      --green-dark: #123d25;
+      --text: #ffffff;
+      --muted: #829889;
+      --danger: #e05252;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button, input {
+      font-family: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN */
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 390px;
+      padding: 32px 25px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+
+    .logo, .brand-logo, .profile-avatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 800;
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 18px;
+      border-radius: 21px;
+      background: var(--green);
+      color: #06100a;
+      font-size: 25px;
+    }
+
+    .login-card h1 {
+      font-size: 29px;
+    }
+
+    .subtitle {
+      margin: 8px 0 25px;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      height: 50px;
+      padding: 0 15px;
+      margin-bottom: 13px;
+      background: #07110c;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      color: white;
+    }
+
+    input:focus {
+      border-color: var(--green);
+    }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 50px;
+      padding: 13px;
+      border-radius: 12px;
+      background: var(--green);
+      color: #06100a;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #17261c;
+      color: white;
+      border: 1px solid var(--border);
+    }
+
+    .error {
+      color: #ff6464;
+      margin-top: 14px;
+      font-size: 14px;
+    }
+
+    /* HEADER */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 70px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0a1510;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: var(--green);
+      color: #06100a;
+      font-size: 14px;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .brand small {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .logout-btn {
+      width: auto;
+      padding: 9px 14px;
+      border-radius: 9px;
+      background: #17261c;
+      color: white;
+      border: 1px solid var(--border);
+    }
+
+    /* MAIN */
+    .screen {
+      width: 100%;
+      max-width: 650px;
+      margin: auto;
+      padding: 22px 18px 100px;
+    }
+
+    .page-title {
+      margin-bottom: 18px;
+    }
+
+    .page-title h2 {
+      font-size: 24px;
+    }
+
+    .page-title p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* BALANCE */
+    .balance-card {
+      padding: 25px 20px;
+      text-align: center;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #10301d, #0b1810);
+      border: 1px solid #245c39;
+    }
+
+    .balance-label {
+      color: #91a99a;
+      font-size: 13px;
+    }
+
+    .balance-card h1 {
+      margin: 11px 0;
+      font-size: 29px;
+    }
+
+    .status {
+      font-size: 13px;
+    }
+
+    .status.stopped {
+      color: #777;
+    }
+
+    .status.active {
+      color: var(--green);
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+      margin-top: 14px;
+    }
+
+    .stat-card {
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .stat-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .stat-card strong {
+      font-size: 13px;
+    }
+
+    /* MINING */
+    .mine-button {
+      width: 100%;
+      min-height: 55px;
+      margin-top: 14px;
+      border-radius: 13px;
+      background: var(--green);
+      color: #06100a;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .mine-button.stop {
+      background: var(--danger);
+      color: white;
+    }
+
+    .mining-card {
+      padding: 30px 20px;
+      border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .mining-circle {
+      width: 85px;
+      height: 85px;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background: var(--green-dark);
+      border: 1px solid #245c39;
+    }
+
+    .mining-circle svg {
+      width: 38px;
+      height: 38px;
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mining-card p {
+      margin-top: 8px;
+      color: var(--muted);
+    }
+
+    .mining-card > strong {
+      display: block;
+      margin-top: 7px;
+      color: var(--green);
+    }
+
+    .section-title {
+      margin: 22px 0 11px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .quick-grid button {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--card);
+      color: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      font-size: 14px;
+    }
+
+    .quick-grid svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* PACKAGES */
+    .package-list {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .package-card {
+      padding: 20px;
+      border-radius: 17px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .package-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .package-head h3 {
+      font-size: 18px;
+    }
+
+    .package-head span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .package-icon {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--green-dark);
+    }
+
+    .package-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .package-rate {
+      margin: 20px 0 15px;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .package-rate small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: normal;
+    }
+
+    .package-card button {
+      width: 100%;
+      height: 45px;
+      border-radius: 10px;
+      background: #173421;
+      border: 1px solid #245c39;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* PANEL */
+    .panel {
+      padding: 21px;
+      border-radius: 17px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .panel-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+      border-radius: 13px;
+      background: var(--green-dark);
+    }
+
+    .panel-icon svg {
+      width: 25px;
+      height: 25px;
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .panel h3 {
+      margin-bottom: 8px;
+    }
+
+    .panel label {
+      display: block;
+      margin: 15px 0 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .notice {
+      margin-top: 14px;
+      color: #718477;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .address {
+      margin: 12px 0;
+      padding: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border-radius: 10px;
+      background: #07110c;
+      border: 1px solid var(--border);
+      color: var(--green);
+      font-size: 12px;
+    }
+
+    .available {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .available strong {
+      display: block;
+      margin-top: 7px;
+      color: white;
+      font-size: 22px;
+    }
+
+    /* REFERRAL */
+    .referral-card {
+      padding: 30px 20px;
+      text-align: center;
+      border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .referral-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--green-dark);
+    }
+
+    .referral-icon svg {
+      width: 34px;
+      height: 34px;
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .referral-card > p {
+      margin: 8px 0 15px;
+      color: var(--muted);
+    }
+
+    .ref-bonus {
+      margin: 15px 0 4px;
+      color: var(--green);
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .referral-card .primary-btn {
+      margin-top: 20px;
+    }
+
+    /* HISTORY */
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 10px;
+      padding: 15px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .history-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 11px;
+      background: var(--green-dark);
+    }
+
+    .history-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 1.7;
+    }
+
+    .history-info {
+      flex: 1;
+    }
+
+    .history-info strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .history-info small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+    }
+
+    .history-amount {
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .empty-history {
+      padding: 35px 15px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    /* ACCOUNT */
+    .profile-card {
+      padding: 25px;
+      text-align: center;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .profile-avatar {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 13px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #06100a;
+    }
+
+    .profile-card h2 {
+      font-size: 20px;
+      margin-bottom: 7px;
+    }
+
+    .online {
+      color: var(--green);
+    }
+
+    .account-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .account-row:last-child {
+      border-bottom: 0;
+    }
+
+    .account-row span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .account-row strong {
+      font-size: 13px;
+    }
+
+    .message {
+      margin-top: 12px;
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    /* NAV */
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      height: 70px;
+      display: flex;
+      justify-content: space-around;
+      background: #0a1510;
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-item {
+      width: 20%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: transparent;
+      color: #66786c;
+      font-size: 10px;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-item.active {
+      color: var(--green);
+    }
+
+    @media (max-width: 480px) {
+      .topbar { padding: 0 14px; }
+      .screen { padding-left: 14px; padding-right: 14px; }
+      .balance-card h1 { font-size: 24px; }
+      .stats-grid { gap: 8px; }
+      .stat-card { padding: 14px 11px; }
+      .stat-card strong { font-size: 12px; }
+      .quick-grid { gap: 8px; }
+      .quick-grid button { min-height: 55px; }
+    }
+
+    @media (min-width: 700px) {
+      .bottom-nav {
+        left: 50%;
+        right: auto;
+        width: 650px;
+        transform: translateX(-50%);
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- ==================== LOGIN ==================== -->
-
+  <!-- LOGIN PAGE -->
   <section id="loginPage" class="page">
-
     <div class="login-card">
-
-      <div class="logo">
-        TN
-      </div>
-
+      <div class="logo">TN</div>
       <h1>TN Mining</h1>
-
-      <p class="subtitle">
-        Cloud Mining Platform
-      </p>
-
-      <input
-        id="username"
-        type="text"
-        placeholder="Username"
-        autocomplete="username"
-      >
-
-      <input
-        id="password"
-        type="password"
-        placeholder="Password"
-        autocomplete="current-password"
-      >
-
-      <button class="primary-btn" onclick="login()">
-        Login
-      </button>
-
+      <p class="subtitle">Cloud Mining Platform</p>
+      
+      <input id="username" type="text" placeholder="Username" autocomplete="username">
+      <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+      
+      <button class="primary-btn" onclick="login()">Login</button>
       <p id="loginError" class="error"></p>
-
     </div>
-
   </section>
 
-
-  <!-- ==================== APP ==================== -->
-
+  <!-- APP PAGE -->
   <section id="appPage" class="hidden">
-
-    <!-- HEADER -->
-
     <header class="topbar">
-
       <div class="brand">
-
-        <div class="brand-logo">
-          TN
-        </div>
-
+        <div class="brand-logo">TN</div>
         <div>
           <strong>TN Mining</strong>
           <small id="welcomeUser">Welcome</small>
         </div>
-
       </div>
-
-      <button class="logout-btn" onclick="logout()">
-        Logout
-      </button>
-
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </header>
 
-
-    <!-- ==================== DASHBOARD ==================== -->
-
+    <!-- DASHBOARD -->
     <main id="dashboard" class="screen">
-
       <div class="page-title">
         <h2>Dashboard</h2>
         <p>Manage your mining account</p>
       </div>
 
-
-      <!-- BALANCE -->
-
       <div class="balance-card">
-
-        <div class="balance-label">
-          Mining Balance
-        </div>
-
-        <h1 id="balance">
-          0.00000000 TN
-        </h1>
-
-        <div id="miningStatus" class="status stopped">
-          ● Mining stopped
-        </div>
-
+        <div class="balance-label">Mining Balance</div>
+        <h1 id="balance">0.00000000 TN</h1>
+        <div id="miningStatus" class="status stopped">● Mining stopped</div>
       </div>
-
-
-      <!-- STATS -->
 
       <div class="stats-grid">
-
         <div class="stat-card">
-
           <span>Mining Rate</span>
-
-          <strong id="rate">
-            0.00001000 TN/s
-          </strong>
-
+          <strong id="rate">0.00001000 TN/s</strong>
         </div>
-
-
         <div class="stat-card">
-
           <span>Mining Time</span>
-
-          <strong id="miningTime">
-            00:00:00
-          </strong>
-
+          <strong id="miningTime">00:00:00</strong>
         </div>
-
-
         <div class="stat-card">
-
           <span>Package</span>
-
-          <strong id="dashboardPackage">
-            Starter
-          </strong>
-
+          <strong id="dashboardPackage">Starter</strong>
         </div>
-
-
         <div class="stat-card">
-
           <span>Account</span>
-
-          <strong class="online">
-            Online
-          </strong>
-
+          <strong class="online">Online</strong>
         </div>
-
       </div>
 
+      <button id="mineButton" class="mine-button" onclick="toggleMining()">Start Mining</button>
 
-      <!-- MINING BUTTON -->
-
-      <button
-        id="mineButton"
-        class="mine-button"
-        onclick="toggleMining()"
-      >
-        Start Mining
-      </button>
-
-
-      <!-- QUICK ACTIONS -->
-
-      <div class="section-title">
-        Quick Actions
-      </div>
-
+      <div class="section-title">Quick Actions</div>
       <div class="quick-grid">
-
         <button onclick="showScreen('deposit')">
-
-          <svg viewBox="0 0 24 24">
-            <path d="M12 3v12"/>
-            <path d="m7 10 5 5 5-5"/>
-            <path d="M5 20h14"/>
-          </svg>
-
+          <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
           <span>Deposit</span>
-
         </button>
-
-
         <button onclick="showScreen('withdraw')">
-
-          <svg viewBox="0 0 24 24">
-            <path d="M12 21V9"/>
-            <path d="m7 14 5-5 5 5"/>
-            <path d="M5 4h14"/>
-          </svg>
-
+          <svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 4h14"/></svg>
           <span>Withdraw</span>
-
         </button>
-
-
         <button onclick="showScreen('packages')">
-
-          <svg viewBox="0 0 24 24">
-            <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/>
-            <path d="m4 7.5 8 4.5 8-4.5"/>
-            <path d="M12 12v9"/>
-          </svg>
-
+          <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5"/><path d="M12 12v9"/></svg>
           <span>Packages</span>
-
         </button>
-
-
         <button onclick="showScreen('history')">
-
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 7v5l3 2"/>
-          </svg>
-
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
           <span>History</span>
-
         </button>
-
       </div>
-
     </main>
 
-
-    <!-- ==================== MINING ==================== -->
-
+    <!-- MINING SCREEN -->
     <main id="mining" class="screen hidden">
-
       <div class="page-title">
         <h2>Mining</h2>
         <p>Start your cloud mining session</p>
       </div>
-
-
       <div class="mining-card">
-
         <div class="mining-circle">
-
-          <svg viewBox="0 0 24 24">
-            <path d="M14 3 5 14h6l-1 7 9-11h-6l1-7Z"/>
-          </svg>
-
+          <svg viewBox="0 0 24 24"><path d="M14 3 5 14h6l-1 7 9-11h-6l1-7Z"/></svg>
         </div>
-
         <h2>Cloud Mining</h2>
-
-        <p>
-          Current mining rate
-        </p>
-
-        <strong id="miningRateLarge">
-          0.00001000 TN/s
-        </strong>
-
-        <button
-          class="mine-button"
-          onclick="toggleMining()"
-          id="mineButton2"
-        >
-          Start Mining
-        </button>
-
+        <p>Current mining rate</p>
+        <strong id="miningRateLarge">0.00001000 TN/s</strong>
+        <button class="mine-button" onclick="toggleMining()" id="mineButton2">Start Mining</button>
       </div>
-
     </main>
 
-
-    <!-- ==================== PACKAGES ==================== -->
-
+    <!-- PACKAGES SCREEN -->
     <main id="packages" class="screen hidden">
-
       <div class="page-title">
         <h2>Mining Packages</h2>
         <p>Choose your mining power</p>
       </div>
-
-
       <div class="package-list">
-
-
         <div class="package-card">
-
           <div class="package-head">
-
             <div>
               <h3>Starter</h3>
               <span>Basic mining</span>
             </div>
-
             <div class="package-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/></svg>
             </div>
-
           </div>
-
-          <div class="package-rate">
-            0.00001000 <small>TN/s</small>
-          </div>
-
-          <button onclick="selectPackage('Starter', 0.00001)">
-            Activate
-          </button>
-
+          <div class="package-rate">0.00001000 <small>TN/s</small></div>
+          <button onclick="selectPackage('Starter', 0.00001)">Activate</button>
         </div>
 
-
         <div class="package-card">
-
           <div class="package-head">
-
             <div>
               <h3>Pro</h3>
               <span>Advanced mining</span>
             </div>
-
             <div class="package-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/></svg>
             </div>
-
           </div>
-
-          <div class="package-rate">
-            0.00002500 <small>TN/s</small>
-          </div>
-
-          <button onclick="selectPackage('Pro', 0.000025)">
-            Activate
-          </button>
-
+          <div class="package-rate">0.00002500 <small>TN/s</small></div>
+          <button onclick="selectPackage('Pro', 0.000025)">Activate</button>
         </div>
 
-
         <div class="package-card">
-
           <div class="package-head">
-
             <div>
               <h3>Ultra</h3>
               <span>Maximum mining</span>
             </div>
-
             <div class="package-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M14 3 5 14h6l-1 7 9-11h-6l1-7Z"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M14 3 5 14h6l-1 7 9-11h-6l1-7Z"/></svg>
             </div>
-
           </div>
-
-          <div class="package-rate">
-            0.00005000 <small>TN/s</small>
-          </div>
-
-          <button onclick="selectPackage('Ultra', 0.00005)">
-            Activate
-          </button>
-
+          <div class="package-rate">0.00005000 <small>TN/s</small></div>
+          <button onclick="selectPackage('Ultra', 0.00005)">Activate</button>
         </div>
-
       </div>
-
     </main>
 
-
-    <!-- ==================== DEPOSIT ==================== -->
-
+    <!-- DEPOSIT SCREEN -->
     <main id="deposit" class="screen hidden">
-
       <div class="page-title">
         <h2>Deposit</h2>
         <p>Add funds to your demo account</p>
       </div>
-
-
       <div class="panel">
-
         <div class="panel-icon">
-
-          <svg viewBox="0 0 24 24">
-            <path d="M12 3v12"/>
-            <path d="m7 10 5 5 5-5"/>
-            <path d="M5 20h14"/>
-          </svg>
-
+          <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
         </div>
-
         <h3>Demo Deposit</h3>
-
-        <p class="muted">
-          Demo wallet address
-        </p>
-
-        <div class="address">
-          TN-DEMO-ADDRESS-001
-        </div>
-
-        <button
-          class="primary-btn"
-          onclick="copyAddress()"
-        >
-          Copy Address
-        </button>
-
-        <button
-          class="secondary-btn"
-          onclick="demoDeposit()"
-        >
-          Add Demo Balance
-        </button>
-
-        <p class="notice">
-          Demo only. No real cryptocurrency is transferred.
-        </p>
-
+        <p class="muted">Demo wallet address</p>
+        <div class="address">TN-DEMO-ADDRESS-001</div>
+        <button class="primary-btn" onclick="copyAddress()">Copy Address</button>
+        <button class="secondary-btn" onclick="demoDeposit()">Add Demo Balance</button>
+        <p class="notice">Demo only. No real cryptocurrency is transferred.</p>
       </div>
-
     </main>
 
-
-    <!-- ==================== WITHDRAW ==================== -->
-
+    <!-- WITHDRAW SCREEN -->
     <main id="withdraw" class="screen hidden">
-
       <div class="page-title">
         <h2>Withdraw</h2>
         <p>Request a demo withdrawal</p>
       </div>
-
-
       <div class="panel">
-
         <div class="available">
           Available Balance
-
-          <strong id="withdrawBalance">
-            0.00000000 TN
-          </strong>
+          <strong id="withdrawBalance">0.00000000 TN</strong>
         </div>
-
-
         <label>Wallet Address</label>
-
-        <input
-          id="withdrawAddress"
-          type="text"
-          placeholder="Enter wallet address"
-        >
-
-
+        <input id="withdrawAddress" type="text" placeholder="Enter wallet address">
         <label>Amount</label>
-
-        <input
-          id="withdrawAmount"
-          type="number"
-          step="0.00000001"
-          placeholder="0.00000000"
-        >
-
-
-        <button
-          class="primary-btn"
-          onclick="withdraw()"
-        >
-          Request Withdraw
-        </button>
-
-
-        <p
-          id="withdrawMessage"
-          class="message"
-        ></p>
-
-
-        <p class="notice">
-          Demo only. No real withdrawal is processed.
-        </p>
-
+        <input id="withdrawAmount" type="number" step="0.00000001" placeholder="0.00000000">
+        <button class="primary-btn" onclick="withdraw()">Request Withdraw</button>
+        <p id="withdrawMessage" class="message"></p>
+        <p class="notice">Demo only. No real withdrawal is processed.</p>
       </div>
-
     </main>
 
-
-    <!-- ==================== REFERRAL ==================== -->
-
+    <!-- REFERRAL SCREEN -->
     <main id="referral" class="screen hidden">
-
       <div class="page-title">
         <h2>Referral</h2>
         <p>Invite users and earn demo rewards</p>
       </div>
-
-
       <div class="referral-card">
-
         <div class="referral-icon">
-
-          <svg viewBox="0 0 24 24">
-            <circle cx="9" cy="8" r="3"/>
-            <path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/>
-            <circle cx="17" cy="9" r="2"/>
-            <path d="M17 14c2.5 0 4 1.5 4 4"/>
-          </svg>
-
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2"/><path d="M17 14c2.5 0 4 1.5 4 4"/></svg>
         </div>
-
         <h2>Referral Program</h2>
-
-        <p>
-          Share your referral code
-        </p>
-
-        <div
-          class="address"
-          id="refCode"
-        >
-          TN-REF
-        </div>
-
-        <div class="ref-bonus">
-          5%
-        </div>
-
-        <span class="muted">
-          Demo referral bonus
-        </span>
-
-        <button
-          class="primary-btn"
-          onclick="copyReferral()"
-        >
-          Copy Referral Code
-        </button>
-
+        <p>Share your referral code</p>
+        <div class="address" id="refCode">TN-REF</div>
+        <div class="ref-bonus">5%</div>
+        <span class="muted">Demo referral bonus</span>
+        <button class="primary-btn" onclick="copyReferral()">Copy Referral Code</button>
         <p id="copyMessage" class="message"></p>
-
       </div>
-
     </main>
 
-
-    <!-- ==================== HISTORY ==================== -->
-
+    <!-- HISTORY SCREEN -->
     <main id="history" class="screen hidden">
-
       <div class="page-title">
         <h2>Transaction History</h2>
         <p>Your recent activity</p>
       </div>
-
-
-      <div id="historyList">
-
-      </div>
-
+      <div id="historyList"></div>
     </main>
 
-
-    <!-- ==================== ACCOUNT ==================== -->
-
+    <!-- ACCOUNT SCREEN -->
     <main id="account" class="screen hidden">
-
       <div class="page-title">
         <h2>Account</h2>
         <p>Your account information</p>
       </div>
-
-
       <div class="profile-card">
-
-        <div class="profile-avatar">
-          TN
-        </div>
-
-        <h2 id="accountName">
-          User
-        </h2>
-
-        <span class="online">
-          ● Online
-        </span>
-
+        <div class="profile-avatar">TN</div>
+        <h2 id="accountName">User</h2>
+        <span class="online">● Online</span>
       </div>
-
-
       <div class="panel">
-
         <div class="account-row">
           <span>Username</span>
           <strong id="accountUsername">-</strong>
         </div>
-
         <div class="account-row">
           <span>Mining Package</span>
           <strong id="currentPackage">Starter</strong>
         </div>
-
         <div class="account-row">
           <span>Mining Rate</span>
           <strong id="accountRate">0.00001000 TN/s</strong>
         </div>
-
         <div class="account-row">
           <span>Status</span>
           <strong class="online">Active</strong>
         </div>
-
       </div>
-
     </main>
 
-
-    <!-- ==================== BOTTOM NAV ==================== -->
-
+    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
-
-      <button
-        class="nav-item active"
-        data-screen="dashboard"
-        onclick="showScreen('dashboard')"
-      >
-
-        <svg viewBox="0 0 24 24">
-          <path d="m3 11 9-8 9 8"/>
-          <path d="M5 10v10h14V10"/>
-          <path d="M9 20v-6h6v6"/>
-        </svg>
-
+      <button class="nav-item active" data-screen="dashboard" onclick="showScreen('dashboard')">
+        <svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
         <span>Home</span>
-
       </button>
-
-
-      <button
-        class="nav-item"
-        data-screen="mining"
-        onclick="showScreen('mining')"
-      >
-
-        <svg viewBox="0 0 24 24">
-          <path d="M14 3 5 14h6l-1 7 9-11h-6l1-7Z"/>
-        </svg>
-
+      <button class="nav-item" data-screen="mining" onclick="showScreen('mining')">
+        <svg viewBox="0 0 24 24"><path d="M14 3 5 14h6l-1 7 9-11h-6l1-7Z"/></svg>
         <span>Mining</span>
-
       </button>
-
-
-      <button
-        class="nav-item"
-        data-screen="referral"
-        onclick="showScreen('referral')"
-      >
-
-        <svg viewBox="0 0 24 24">
-          <circle cx="9" cy="8" r="3"/>
-          <path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/>
-          <circle cx="17" cy="9" r="2"/>
-          <path d="M17 14c2.5 0 4 1.5 4 4"/>
-        </svg>
-
+      <button class="nav-item" data-screen="referral" onclick="showScreen('referral')">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2"/><path d="M17 14c2.5 0 4 1.5 4 4"/></svg>
         <span>Referral</span>
-
       </button>
-
-
-      <button
-        class="nav-item"
-        data-screen="history"
-        onclick="showScreen('history')"
-      >
-
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 7v5l3 2"/>
-        </svg>
-
+      <button class="nav-item" data-screen="history" onclick="showScreen('history')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
         <span>History</span>
-
       </button>
-
-
-      <button
-        class="nav-item"
-        data-screen="account"
-        onclick="showScreen('account')"
-      >
-
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="8" r="3"/>
-          <path d="M5 20c0-4 3-6 7-6s7 2 7 6"/>
-        </svg>
-
+      <button class="nav-item" data-screen="account" onclick="showScreen('account')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg>
         <span>Account</span>
-
       </button>
-
     </nav>
-
   </section>
 
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    let mining = false;
+    let miningTimer = null;
+    let miningSeconds = Number(localStorage.getItem("tn_mining_seconds")) || 0;
+    let balance = Number(localStorage.getItem("tn_balance")) || 0;
+    let miningRate = Number(localStorage.getItem("tn_rate")) || 0.00001;
+    let packageName = localStorage.getItem("tn_package") || "Starter";
+    let username = localStorage.getItem("tn_user") || "";
+    let transactions = JSON.parse(localStorage.getItem("tn_transactions") || "[]");
 
-  <script type="module" src="app.js"></script>
+    function login() {
+      const uInput = document.getElementById("username");
+      const pInput = document.getElementById("password");
+      const error = document.getElementById("loginError");
 
+      let val = uInput.value.trim();
+      let pass = pInput.value.trim();
+
+      if (!val || !pass) {
+        error.textContent = "Please enter username and password.";
+        return;
+      }
+
+      username = val;
+      localStorage.setItem("tn_user", username);
+      error.textContent = "";
+      showApp();
+    }
+
+    function showApp() {
+      document.getElementById("loginPage").classList.add("hidden");
+      document.getElementById("appPage").classList.remove("hidden");
+
+      document.getElementById("welcomeUser").textContent = "Welcome, " + username;
+      document.getElementById("accountName").textContent = username;
+      document.getElementById("accountUsername").textContent = username;
+
+      updateAll();
+      showScreen("dashboard");
+    }
+
+    function logout() {
+      stopMining();
+      localStorage.removeItem("tn_user");
+      username = "";
+      document.getElementById("appPage").classList.add("hidden");
+      document.getElementById("loginPage").classList.remove("hidden");
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+    }
+
+    function showScreen(screenName) {
+      const screens = document.querySelectorAll(".screen");
+      screens.forEach(s => s.classList.add("hidden"));
+
+      const selected = document.getElementById(screenName);
+      if (selected) selected.classList.remove("hidden");
+
+      const navItems = document.querySelectorAll(".nav-item");
+      navItems.forEach(item => {
+        item.classList.remove("active");
+        if (item.dataset.screen === screenName) {
+          item.classList.add("active");
+        }
+      });
+
+      if (screenName === "history") renderHistory();
+      if (screenName === "withdraw") updateWithdrawBalance();
+    }
+
+    function toggleMining() {
+      if (mining) stopMining();
+      else startMining();
+    }
+
+    function startMining() {
+      if (mining) return;
+      mining = true;
+
+      const buttons = [
+        document.getElementById("mineButton"),
+        document.getElementById("mineButton2")
+      ];
+
+      buttons.forEach(b => {
+        if (b) {
+          b.textContent = "Stop Mining";
+          b.classList.add("stop");
+        }
+      });
+
+      const status = document.getElementById("miningStatus");
+      if (status) {
+        status.textContent = "● Mining active";
+        status.classList.remove("stopped");
+        status.classList.add("active");
+      }
+
+      miningTimer = setInterval(() => {
+        balance += miningRate;
+        miningSeconds++;
+
+        localStorage.setItem("tn_balance", balance.toFixed(8));
+        localStorage.setItem("tn_mining_seconds", miningSeconds);
+
+        updateAll();
+      }, 1000);
+    }
+
+    function stopMining() {
+      mining = false;
+      if (miningTimer) {
+        clearInterval(miningTimer);
+        miningTimer = null;
+      }
+
+      const buttons = [
+        document.getElementById("mineButton"),
+        document.getElementById("mineButton2")
+      ];
+
+      buttons.forEach(b => {
+        if (b) {
+          b.textContent = "Start Mining";
+          b.classList.remove("stop");
+        }
+      });
+
+      const status = document.getElementById("miningStatus");
+      if (status) {
+        status.textContent = "● Mining stopped";
+        status.classList.remove("active");
+        status.classList.add("stopped");
+      }
+    }
+
+    function updateBalance() {
+      const el = document.getElementById("balance");
+      if (el) el.textContent = balance.toFixed(8) + " TN";
+    }
+
+    function updateMiningTime() {
+      const hours = Math.floor(miningSeconds / 3600);
+      const minutes = Math.floor((miningSeconds % 3600) / 60);
+      const seconds = miningSeconds % 60;
+
+      const time = String(hours).padStart(2, "0") + ":" +
+                   String(minutes).padStart(2, "0") + ":" +
+                   String(seconds).padStart(2, "0");
+
+      const el = document.getElementById("miningTime");
+      if (el) el.textContent = time;
+    }
+
+    function updateRate() {
+      const rateText = miningRate.toFixed(8) + " TN/s";
+      const elements = [
+        document.getElementById("rate"),
+        document.getElementById("miningRateLarge"),
+        document.getElementById("accountRate")
+      ];
+      elements.forEach(el => { if (el) el.textContent = rateText; });
+    }
+
+    function updatePackage() {
+      const elements = [
+        document.getElementById("dashboardPackage"),
+        document.getElementById("currentPackage")
+      ];
+      elements.forEach(el => { if (el) el.textContent = packageName; });
+    }
+
+    function selectPackage(name, rate) {
+      packageName = name;
+      miningRate = rate;
+
+      localStorage.setItem("tn_package", packageName);
+      localStorage.setItem("tn_rate", miningRate);
+
+      updateAll();
+      alert(name + " package activated.");
+      showScreen("mining");
+    }
+
+    function demoDeposit() {
+      const amount = 1;
+      balance += amount;
+      localStorage.setItem("tn_balance", balance.toFixed(8));
+      addTransaction("Deposit", amount);
+      updateAll();
+      alert("Demo balance added: " + amount.toFixed(8) + " TN");
+    }
+
+    function copyAddress() {
+      const address = "TN-DEMO-ADDRESS-001";
+      navigator.clipboard.writeText(address).then(() => {
+        alert("Demo address copied.");
+      }).catch(() => {
+        alert(address);
+      });
+    }
+
+    function withdraw() {
+      const address = document.getElementById("withdrawAddress").value.trim();
+      const amount = Number(document.getElementById("withdrawAmount").value);
+      const message = document.getElementById("withdrawMessage");
+
+      if (!address) {
+        message.textContent = "Please enter wallet address.";
+        return;
+      }
+      if (!amount || amount <= 0) {
+        message.textContent = "Please enter a valid amount.";
+        return;
+      }
+      if (amount > balance) {
+        message.textContent = "Insufficient demo balance.";
+        return;
+      }
+
+      balance -= amount;
+      localStorage.setItem("tn_balance", balance.toFixed(8));
+      addTransaction("Withdraw", amount);
+
+      message.textContent = "Demo withdrawal request created.";
+      document.getElementById("withdrawAddress").value = "";
+      document.getElementById("withdrawAmount").value = "";
+      updateAll();
+    }
+
+    function updateWithdrawBalance() {
+      const el = document.getElementById("withdrawBalance");
+      if (el) el.textContent = balance.toFixed(8) + " TN";
+    }
+
+    function getReferralCode() {
+      if (!username) return "TN-REF";
+      return "TN-" + username.replace(/\s/g, "").substring(0, 6).toUpperCase();
+    }
+
+    function copyReferral() {
+      const code = getReferralCode();
+      const el = document.getElementById("refCode");
+      if (el) el.textContent = code;
+
+      navigator.clipboard.writeText(code).then(() => {
+        document.getElementById("copyMessage").textContent = "Referral code copied.";
+      }).catch(() => {
+        document.getElementById("copyMessage").textContent = code;
+      });
+    }
+
+    function addTransaction(type, amount) {
+      const transaction = {
+        type: type,
+        amount: Number(amount),
+        time: new Date().toLocaleString()
+      };
+      transactions.unshift(transaction);
+      if (transactions.length > 50) transactions = transactions.slice(0, 50);
+
+      localStorage.setItem("tn_transactions", JSON.stringify(transactions));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const list = document.getElementById("historyList");
+      if (!list) return;
+
+      if (!transactions.length) {
+        list.innerHTML = `<div class="empty-history">No transactions yet.</div>`;
+        return;
+      }
+
+      list.innerHTML = transactions.map(t => {
+        const isDeposit = t.type === "Deposit";
+        const icon = isDeposit
+          ? `<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>`
+          : `<svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 4h14"/></svg>`;
+        const sign = isDeposit ? "+" : "-";
+
+        return `
+          <div class="history-item">
+            <div class="history-icon">${icon}</div>
+            <div class="history-info">
+              <strong>${t.type}</strong>
+              <small>${t.time}</small>
+            </div>
+            <div class="history-amount">${sign} ${t.amount.toFixed(8)} TN</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateAll() {
+      updateBalance();
+      updateMiningTime();
+      updateRate();
+      updatePackage();
+      updateWithdrawBalance();
+
+      const refCode = document.getElementById("refCode");
+      if (refCode) refCode.textContent = getReferralCode();
+
+      renderHistory();
+    }
+
+    // Auto load on start
+    window.onload = function() {
+      if (username) {
+        showApp();
+      } else {
+        document.getElementById("loginPage").classList.remove("hidden");
+        document.getElementById("appPage").classList.add("hidden");
+      }
+    };
+  </script>
 </body>
 </html>
