@@ -7,6 +7,42 @@
 
 /* ================= CONFIG ================= */
 
+/* ================= FIREBASE ================= */
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { 
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAxAmAztC802TgPiphufStHH_JIyub-Sso",
+  authDomain: "tn-mining.firebaseapp.com",
+  projectId: "tn-mining",
+  storageBucket: "tn-mining.firebasestorage.app",
+  messagingSenderId: "176273347946",
+  appId: "1:176273347946:web:c9201ebf4dfa30dea10113",
+  measurementId: "G-17W6BH2JPK"
+};
+
+
+const firebaseApp = initializeApp(firebaseConfig);
+
+const auth = getAuth(firebaseApp);
+
+const db = getFirestore(firebaseApp);
+
 let mining = false;
 
 let miningTimer = null;
