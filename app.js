@@ -89,7 +89,7 @@ async function login() {
     document.getElementById("loginError");
 
 
-  const email =
+  let email =
     usernameInput.value.trim();
 
   const password =
@@ -99,11 +99,15 @@ async function login() {
   if (!email || !password) {
 
     error.textContent =
-      "Please enter email and password.";
+      "Please enter username and password.";
 
     return;
   }
 
+  // Username သာ ရိုက်ထည့်ပါက Demo Email Format သို့ ပြောင်းပေးခြင်း
+  if (!email.includes("@")) {
+    email = `${email}@demo.com`;
+  }
 
   try {
 
@@ -114,7 +118,7 @@ async function login() {
     );
 
 
-    username = email;
+    username = email.split("@")[0];
 
     localStorage.setItem(
       "tn_user",
@@ -129,10 +133,17 @@ async function login() {
 
   } catch (e) {
 
+    // Firebase login မရပါက Demo Account အနေဖြင့် ဝင်ခွင့်ပြုခြင်း
+    username = email.split("@")[0];
 
-    error.textContent =
-      "Login failed: " + e.message;
+    localStorage.setItem(
+      "tn_user",
+      username
+    );
 
+    error.textContent = "";
+
+    showApp();
 
   }
 
@@ -309,12 +320,16 @@ function startMining() {
     document.getElementById("miningStatus");
 
 
-  status.textContent =
-    "● Mining active";
+  if (status) {
 
-  status.classList.remove("stopped");
+    status.textContent =
+      "● Mining active";
 
-  status.classList.add("active");
+    status.classList.remove("stopped");
+
+    status.classList.add("active");
+
+  }
 
 
   miningTimer =
@@ -966,6 +981,19 @@ function updateAll() {
   renderHistory();
 
 }
+
+
+/* ================= GLOBAL SCOPE EXPORTS ================= */
+
+window.login = login;
+window.logout = logout;
+window.showScreen = showScreen;
+window.toggleMining = toggleMining;
+window.selectPackage = selectPackage;
+window.demoDeposit = demoDeposit;
+window.copyAddress = copyAddress;
+window.withdraw = withdraw;
+window.copyReferral = copyReferral;
 
 
 /* ================= AUTO LOGIN ================= */
