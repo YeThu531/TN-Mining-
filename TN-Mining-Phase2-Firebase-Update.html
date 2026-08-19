@@ -1,0 +1,44 @@
+<!-- TN Mining Phase 2 Firebase Update
+     NOTE: This is a Firebase Auth/Firestore integration template.
+     Keep your current Gemini index.html backup before replacing.
+-->
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>TN Mining Phase 2</title></head>
+<body>
+<h2>TN Mining Phase 2 Firebase Setup</h2>
+<p>This file is a Phase 2 Firebase integration starter. Use it with your existing TN Mining UI.</p>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyAxAmAztC802TgPiphufStHH_JIyub-Sso",
+ authDomain: "tn-mining.firebaseapp.com",
+ projectId: "tn-mining",
+ storageBucket: "tn-mining.firebasestorage.app",
+ messagingSenderId: "176273347946",
+ appId: "1:176273347946:web:c9201ebf4dfa30dea10113"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.register = async function(email,password){
+ const result = await createUserWithEmailAndPassword(auth,email,password);
+ await setDoc(doc(db,"users",result.user.uid),{
+  email: email,
+  balance:0,
+  package:"Starter",
+  miningRate:0.00001
+ });
+ alert("Account created");
+}
+
+window.loginFirebase = async function(email,password){
+ await signInWithEmailAndPassword(auth,email,password);
+ alert("Login success");
+}
+</script>
+</body></html>
