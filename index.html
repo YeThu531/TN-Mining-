@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TN Mining</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <section id="loginPage" class="page">
+    <div class="card login-card">
+      <div class="logo">TN</div>
+      <h1>TN Mining</h1>
+      <p class="subtitle">Cloud Mining Platform</p>
+
+      <input id="username" type="text" placeholder="Username">
+      <input id="password" type="password" placeholder="Password">
+
+      <button onclick="login()">LOGIN</button>
+
+      <p id="loginError" class="error"></p>
+    </div>
+  </section>
+
+
+  <!-- APP -->
+  <section id="appPage" class="page hidden">
+
+    <header>
+      <div>
+        <strong>TN Mining</strong>
+        <small id="welcomeUser"></small>
+      </div>
+      <button class="logout" onclick="logout()">Logout</button>
+    </header>
+
+    <main>
+
+      <div class="balance-card">
+        <p>Mining Balance</p>
+        <h2 id="balance">0.00000000 TN</h2>
+        <span id="miningStatus">● Mining stopped</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span>Mining Rate</span>
+          <b>0.00001000 TN/s</b>
+        </div>
+
+        <div class="stat">
+          <span>Mining Time</span>
+          <b id="miningTime">00:00:00</b>
+        </div>
+      </div>
+
+      <button id="mineButton" class="mine-button" onclick="toggleMining()">
+        START MINING
+      </button>
+
+      <div class="panel">
+        <h3>Account</h3>
+        <p>Username: <b id="accountName"></b></p>
+        <p>Status: <b class="online">Online</b></p>
+      </div>
+
+      <div class="panel">
+        <h3>Important</h3>
+        <p>
+          This is a demo mining application. Balance and mining data
+          are stored locally in your browser.
+        </p>
+      </div>
+
+    </main>
+
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
