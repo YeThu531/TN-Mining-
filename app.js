@@ -77,7 +77,7 @@ const appPage =
 
 /* ================= LOGIN ================= */
 
-function login() {
+async function login() {
 
   const usernameInput =
     document.getElementById("username");
@@ -88,33 +88,53 @@ function login() {
   const error =
     document.getElementById("loginError");
 
-  const name =
+
+  const email =
     usernameInput.value.trim();
 
   const password =
     passwordInput.value.trim();
 
 
-  if (!name || !password) {
+  if (!email || !password) {
 
     error.textContent =
-      "Please enter username and password.";
+      "Please enter email and password.";
 
     return;
   }
 
 
-  username = name;
+  try {
 
-  localStorage.setItem(
-    "tn_user",
-    username
-  );
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
 
-  error.textContent = "";
+    username = email;
 
-  showApp();
+    localStorage.setItem(
+      "tn_user",
+      username
+    );
+
+
+    error.textContent = "";
+
+    showApp();
+
+
+  } catch (e) {
+
+
+    error.textContent =
+      "Login failed: " + e.message;
+
+
+  }
 
 }
 
